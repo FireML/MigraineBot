@@ -20,7 +20,7 @@ public class DisablePingTask extends TimerTask {
 
     private static final long SERVER_ID = 1493002700067962912L;
     private static final long AUTOMOD_RULE_ID = 1496606212492497097L;
-    private static final long LOG_CHANNEL_ID = 1496613194817474742L;
+    private static final long LOG_CHANNEL_ID = 1493912068095479808L;
 
     // Testing Values
     //private static final long SERVER_ID = 1477810954686300303L;
