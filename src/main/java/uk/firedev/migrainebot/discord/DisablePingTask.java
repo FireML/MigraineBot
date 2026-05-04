@@ -18,15 +18,6 @@ import java.util.concurrent.TimeUnit;
 
 public class DisablePingTask extends TimerTask {
 
-    private static final long SERVER_ID = 1493002700067962912L;
-    private static final long AUTOMOD_RULE_ID = 1496606212492497097L;
-    private static final long LOG_CHANNEL_ID = 1493912068095479808L;
-
-    // Testing Values
-    //private static final long SERVER_ID = 1477810954686300303L;
-    //private static final long AUTOMOD_RULE_ID = 1496607451896877146L;
-    //private static final long LOG_CHANNEL_ID = 1496613182557520084L;
-
     private final Timer timer = new Timer();
     private final Set<Integer> allowedHours = Set.of(
         9,
@@ -90,11 +81,11 @@ public class DisablePingTask extends TimerTask {
     }
 
     private AutoModRule getRule() {
-        Guild guild = MigraineBot.get().getBot().getGuildById(SERVER_ID);
+        Guild guild = MigraineBot.get().getBot().getGuildById(Main.SERVER_ID);
         if (guild == null) {
             throw new RuntimeException("Invalid Guild.");
         }
-        AutoModRule rule = guild.retrieveAutoModRuleById(AUTOMOD_RULE_ID).complete();
+        AutoModRule rule = guild.retrieveAutoModRuleById(Main.AUTOMOD_RULE_ID).complete();
         if (rule == null) {
             throw new RuntimeException("Invalid AutoMod Rule.");
         }
@@ -102,7 +93,7 @@ public class DisablePingTask extends TimerTask {
     }
 
     private TextChannel getLogChannel() {
-        GuildChannel channel = MigraineBot.get().getBot().getGuildChannelById(LOG_CHANNEL_ID);
+        GuildChannel channel = MigraineBot.get().getBot().getGuildChannelById(Main.LOG_CHANNEL_ID);
         if (!(channel instanceof TextChannel text)) {
             throw new RuntimeException("Log channel isn't a text channel");
         }

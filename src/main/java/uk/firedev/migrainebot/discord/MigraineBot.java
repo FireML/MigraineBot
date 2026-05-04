@@ -5,6 +5,8 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import uk.firedev.migrainebot.Main;
+import uk.firedev.migrainebot.discord.submissions.SubmissionManager;
+import uk.firedev.migrainebot.discord.submissions.SubmitCommand;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -35,6 +37,10 @@ public class MigraineBot {
     public void load() {
         this.bot = buildBot(initializeBuilder());
         awaitBotReady();
+        this.bot.addEventListener(new SubmissionManager());
+        this.bot.updateCommands().addCommands(
+            SubmitCommand.get()
+        ).queue();
 
         // Checks every minute for the time because I'm lazy
         DisablePingTask.getInstance().start();
