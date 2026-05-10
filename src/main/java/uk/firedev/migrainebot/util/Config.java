@@ -13,7 +13,7 @@ import java.nio.file.Paths;
  */
 public class Config {
 
-    public static @NotNull String fetch(@NotNull String name) {
+    public static @NotNull String read(@NotNull String name) {
         Path path = Paths.get(name);
         try {
             if (!Files.exists(path)) {
@@ -38,7 +38,7 @@ public class Config {
     }
 
     public static @NotNull String getBotToken() {
-        return fetch("discord_token");
+        return read("discord_token");
     }
 
 }
