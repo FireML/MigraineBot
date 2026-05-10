@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import uk.firedev.migrainebot.Main;
 import uk.firedev.migrainebot.discord.submissions.SubmissionManager;
 import uk.firedev.migrainebot.discord.submissions.SubmitCommand;
+import uk.firedev.migrainebot.util.Config;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -29,7 +30,7 @@ public class MigraineBot {
 
     protected JDABuilder initializeBuilder() {
         return JDABuilder.createLight(
-            getToken(),
+            Config.getBotToken(),
             EnumSet.allOf(GatewayIntent.class)
         ).setMemberCachePolicy(MemberCachePolicy.ALL);
     }
@@ -59,18 +60,6 @@ public class MigraineBot {
             this.bot.awaitReady();
         } catch (InterruptedException exception) {
             Main.getLogger().log(Level.SEVERE, "Waiting for bot to load was interrupted!", exception);
-        }
-    }
-
-    private static String getToken() {
-        Path path = Paths.get("discord_token");
-        try {
-            if (!Files.exists(path)) {
-                Files.createFile(path);
-            }
-            return Files.readString(path, StandardCharsets.UTF_8).trim();
-        } catch (IOException exception) {
-            throw new RuntimeException(exception);
         }
     }
 
