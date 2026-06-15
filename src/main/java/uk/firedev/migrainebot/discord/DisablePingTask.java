@@ -64,7 +64,7 @@ public class DisablePingTask extends TimerTask {
 
     private void disablePing() {
         if (isMentionable == null || isMentionable) {
-            getLogChannel().sendMessage("Staff can no longer be pinged.").queue();
+            getLogChannel().sendMessage("WoozStaff can no longer be pinged.").queue();
             Main.getLogger().info("AutoMod Rule Enabled, Staff can no longer be pinged :D");
             getRule().getManager().setEnabled(true).queue();
             isMentionable = false;
@@ -73,7 +73,7 @@ public class DisablePingTask extends TimerTask {
 
     private void enablePing() {
         if (isMentionable == null || !isMentionable) {
-            getLogChannel().sendMessage("Staff can now be pinged.").queue();
+            getLogChannel().sendMessage("WoozStaff can now be pinged.").queue();
             Main.getLogger().info("AutoMod Rule Disabled, Staff can now be pinged :D");
             getRule().getManager().setEnabled(false).queue();
             isMentionable = true;
