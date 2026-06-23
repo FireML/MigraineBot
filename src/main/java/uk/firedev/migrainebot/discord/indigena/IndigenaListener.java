@@ -43,14 +43,9 @@ public class IndigenaListener extends ListenerAdapter {
             .setImage(attachment.getUrl())
             .build();
 
-        TextChannel channel = MigraineBot.get().getBot().getTextChannelById(Main.INDIGENA_CHANNEL);
-        if (channel == null) {
-            interaction.reply("An error has occurred. Please try again later.").setEphemeral(true).queue();
-            return;
-        }
-
-        channel.sendMessageEmbeds(embed).queue();
-        interaction.reply("Your submission has been noted.").setEphemeral(true).queue();
+        MigraineBot.get().indigenaWebhook.sendMessageEmbeds(embed)
+            .and(interaction.reply("Your submission has been noted.").setEphemeral(true))
+            .queue();
     }
 
 }

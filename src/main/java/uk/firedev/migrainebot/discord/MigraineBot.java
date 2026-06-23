@@ -2,6 +2,8 @@ package uk.firedev.migrainebot.discord;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.IncomingWebhookClient;
+import net.dv8tion.jda.api.entities.WebhookClient;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import uk.firedev.migrainebot.Main;
@@ -16,6 +18,8 @@ public class MigraineBot {
 
     private static final MigraineBot instance = new MigraineBot();
     private JDA bot;
+
+    public IncomingWebhookClient indigenaWebhook;
 
     public static MigraineBot get() {
         return instance;
@@ -37,6 +41,8 @@ public class MigraineBot {
         this.bot.updateCommands().addCommands(
             SubmitCommand.get()
         ).queue();
+
+        this.indigenaWebhook = WebhookClient.createClient(this.bot, Main.INDIGENA_WEBHOOK);
 
         // Checks every minute for the time because I'm lazy
         DisablePingTask.getInstance().start();
