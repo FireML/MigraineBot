@@ -5,15 +5,10 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import uk.firedev.migrainebot.Main;
-import uk.firedev.migrainebot.discord.submissions.SubmissionManager;
-import uk.firedev.migrainebot.discord.submissions.SubmitCommand;
+import uk.firedev.migrainebot.discord.indigena.IndigenaListener;
+import uk.firedev.migrainebot.discord.indigena.SubmitCommand;
 import uk.firedev.migrainebot.util.Config;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.EnumSet;
 import java.util.logging.Level;
 
@@ -38,7 +33,7 @@ public class MigraineBot {
     public void load() {
         this.bot = buildBot(initializeBuilder());
         awaitBotReady();
-        this.bot.addEventListener(new SubmissionManager());
+        this.bot.addEventListener(new IndigenaListener());
         this.bot.updateCommands().addCommands(
             SubmitCommand.get()
         ).queue();

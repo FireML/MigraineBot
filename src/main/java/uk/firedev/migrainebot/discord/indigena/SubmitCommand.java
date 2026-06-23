@@ -1,4 +1,4 @@
-package uk.firedev.migrainebot.discord.submissions;
+package uk.firedev.migrainebot.discord.indigena;
 
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
