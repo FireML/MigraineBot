@@ -11,7 +11,6 @@ import uk.firedev.migrainebot.discord.buildcomp.BuildCompListener;
 import uk.firedev.migrainebot.discord.buildcomp.BuildCompCommand;
 import uk.firedev.migrainebot.discord.indigena.IndigenaListener;
 import uk.firedev.migrainebot.discord.indigena.SubmitCommand;
-import uk.firedev.migrainebot.util.Config;
 
 import java.util.EnumSet;
 import java.util.logging.Level;
@@ -32,7 +31,7 @@ public class MigraineBot {
 
     protected JDABuilder initializeBuilder() {
         return JDABuilder.createLight(
-            Config.getBotToken(),
+            Main.CONFIG.botToken,
             EnumSet.allOf(GatewayIntent.class)
         ).setMemberCachePolicy(MemberCachePolicy.ALL);
     }
@@ -49,8 +48,8 @@ public class MigraineBot {
             BuildCompCommand.get()
         ).queue();
 
-        this.indigenaWebhook = WebhookClient.createClient(this.bot, Main.INDIGENA_WEBHOOK);
-        this.buildCompWebhook = WebhookClient.createClient(this.bot, Main.BUILD_COMP_WEBHOOK);
+        this.indigenaWebhook = WebhookClient.createClient(this.bot, Main.CONFIG.webhooks.indigena);
+        this.buildCompWebhook = WebhookClient.createClient(this.bot, Main.CONFIG.webhooks.buildComp);
 
         // Checks every minute for the time because I'm lazy
         DisablePingTask.getInstance().start();

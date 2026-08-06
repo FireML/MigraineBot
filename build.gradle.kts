@@ -15,6 +15,7 @@ dependencies {
     implementation(libs.jda) {
         exclude(module="opus-java")
     }
+    implementation(libs.bundles.jshepherd)
 }
 
 tasks {
@@ -31,7 +32,5 @@ tasks {
         archiveBaseName.set("migrainebot")
         archiveVersion.set("")
         archiveClassifier.set("")
-
-        minimize()
     }
 }

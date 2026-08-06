@@ -1,8 +1,11 @@
 package uk.firedev.migrainebot;
 
+import de.bsommerfeld.jshepherd.core.ConfigurationLoader;
+import uk.firedev.migrainebot.config.Configuration;
 import uk.firedev.migrainebot.discord.MigraineBot;
-import uk.firedev.migrainebot.util.Config;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.logging.Logger;
 
 public class Main {
@@ -13,13 +16,14 @@ public class Main {
     public static final long AUTOMOD_RULE_ID = TESTING ? 1518797860353605642L : 1496606212492497097L;
     public static final long LOG_CHANNEL_ID = TESTING ? 1496613182557520084L : 1493912068095479808L;
 
-    public static final String INDIGENA_WEBHOOK = TESTING
-        ? Config.read("testing_indigena_webhook")
-        : Config.read("indigena_webhook");
+    public static final Configuration CONFIG;
 
-    public static final String BUILD_COMP_WEBHOOK = TESTING
-        ? Config.read("testing_build_comp_webhook")
-        : Config.read("build_comp_webhook");
+    static {
+        Path configFile = Paths.get("config.yml");
+        CONFIG = ConfigurationLoader.from(configFile)
+            .withComments()
+            .load(Configuration::new);
+    }
 
     static void main(String[] args) {
         MigraineBot.get().load();
