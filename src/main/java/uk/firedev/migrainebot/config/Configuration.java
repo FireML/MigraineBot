@@ -23,6 +23,10 @@ public class Configuration extends ConfigurablePojo<Configuration> {
     @Comment("The ID of the channel to log to.")
     public long logChannelId;
 
+    @Key("settings-role-id")
+    @Comment("The role that can use the settings command.")
+    public long settingsRoleId;
+
     @Comment("Webhook settings")
     @Section("webhooks")
     public WebhookSettings webhooks = new WebhookSettings();

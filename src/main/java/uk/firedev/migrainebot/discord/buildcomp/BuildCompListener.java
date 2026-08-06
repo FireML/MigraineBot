@@ -54,9 +54,8 @@ public class BuildCompListener extends ListenerAdapter {
             .setImage(attachment.getUrl())
             .build();
 
-        MigraineBot.get().buildCompWebhook.sendMessageEmbeds(embed)
-            .and(interaction.reply("Your submission has been noted.").setEphemeral(true))
-            .queue();
+        MigraineBot.get().buildCompWebhook.sendMessageEmbeds(embed).queue();
+        interaction.reply("Your submission has been noted.").setEphemeral(true).queue();
     }
 
 }
