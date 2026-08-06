@@ -7,11 +7,21 @@ import de.bsommerfeld.jshepherd.core.ConfigurablePojo;
 
 public class Configuration extends ConfigurablePojo<Configuration> {
 
-    public enum Environment { TESTING, PROD }
-
     @Key("bot-token")
     @Comment("The discord bot token.")
     public String botToken;
+
+    @Key("server-id")
+    @Comment("The ID of the server to operate in.")
+    public long serverId;
+
+    @Key("automod-rule-id")
+    @Comment("The ID of the automod rule to toggle. (WoozStaff ping toggle)")
+    public long autoModRuleId;
+
+    @Key("log-channel-id")
+    @Comment("The ID of the channel to log to.")
+    public long logChannelId;
 
     @Comment("Webhook settings")
     @Section("webhooks")

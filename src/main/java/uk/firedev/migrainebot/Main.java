@@ -10,12 +10,6 @@ import java.util.logging.Logger;
 
 public class Main {
 
-    public static final boolean TESTING = true;
-
-    public static final long SERVER_ID = TESTING ? 1477810954686300303L : 1493002700067962912L;
-    public static final long AUTOMOD_RULE_ID = TESTING ? 1518797860353605642L : 1496606212492497097L;
-    public static final long LOG_CHANNEL_ID = TESTING ? 1496613182557520084L : 1493912068095479808L;
-
     public static final Configuration CONFIG;
 
     static {
@@ -23,6 +17,8 @@ public class Main {
         CONFIG = ConfigurationLoader.from(configFile)
             .withComments()
             .load(Configuration::new);
+        // Save new keys.
+        CONFIG.save();
     }
 
     static void main(String[] args) {

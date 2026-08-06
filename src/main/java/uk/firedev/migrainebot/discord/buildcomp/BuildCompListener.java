@@ -31,7 +31,7 @@ public class BuildCompListener extends ListenerAdapter {
             return;
         }
         Guild guild = event.getGuild();
-        if (guild == null || guild.getIdLong() != Main.SERVER_ID) {
+        if (guild == null || guild.getIdLong() != Main.CONFIG.serverId) {
             event.getInteraction().reply("You cannot use this command here.").setEphemeral(true).queue();
             return;
         }

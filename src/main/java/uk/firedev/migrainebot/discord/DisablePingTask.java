@@ -81,11 +81,11 @@ public class DisablePingTask extends TimerTask {
     }
 
     private AutoModRule getRule() {
-        Guild guild = MigraineBot.get().getBot().getGuildById(Main.SERVER_ID);
+        Guild guild = MigraineBot.get().getBot().getGuildById(Main.CONFIG.serverId);
         if (guild == null) {
             throw new RuntimeException("Invalid Guild.");
         }
-        AutoModRule rule = guild.retrieveAutoModRuleById(Main.AUTOMOD_RULE_ID).complete();
+        AutoModRule rule = guild.retrieveAutoModRuleById(Main.CONFIG.autoModRuleId).complete();
         if (rule == null) {
             throw new RuntimeException("Invalid AutoMod Rule.");
         }
@@ -93,7 +93,7 @@ public class DisablePingTask extends TimerTask {
     }
 
     private TextChannel getLogChannel() {
-        GuildChannel channel = MigraineBot.get().getBot().getGuildChannelById(Main.LOG_CHANNEL_ID);
+        GuildChannel channel = MigraineBot.get().getBot().getGuildChannelById(Main.CONFIG.logChannelId);
         if (!(channel instanceof TextChannel text)) {
             throw new RuntimeException("Log channel isn't a text channel");
         }
