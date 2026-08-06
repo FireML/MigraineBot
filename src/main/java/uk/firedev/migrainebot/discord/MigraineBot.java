@@ -7,8 +7,8 @@ import net.dv8tion.jda.api.entities.WebhookClient;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import uk.firedev.migrainebot.Main;
-import uk.firedev.migrainebot.discord.feud.FeudListener;
-import uk.firedev.migrainebot.discord.feud.FeudSubmitCommand;
+import uk.firedev.migrainebot.discord.buildcomp.BuildCompListener;
+import uk.firedev.migrainebot.discord.buildcomp.BuildCompCommand;
 import uk.firedev.migrainebot.discord.indigena.IndigenaListener;
 import uk.firedev.migrainebot.discord.indigena.SubmitCommand;
 import uk.firedev.migrainebot.util.Config;
@@ -22,7 +22,7 @@ public class MigraineBot {
     private JDA bot;
 
     public IncomingWebhookClient indigenaWebhook;
-    public IncomingWebhookClient feudWebhook;
+    public IncomingWebhookClient buildCompWebhook;
 
     public static MigraineBot get() {
         return instance;
@@ -42,15 +42,15 @@ public class MigraineBot {
         awaitBotReady();
         this.bot.addEventListener(
             new IndigenaListener(),
-            new FeudListener()
+            new BuildCompListener()
         );
         this.bot.updateCommands().addCommands(
             SubmitCommand.get(),
-            FeudSubmitCommand.get()
+            BuildCompCommand.get()
         ).queue();
 
         this.indigenaWebhook = WebhookClient.createClient(this.bot, Main.INDIGENA_WEBHOOK);
-        this.feudWebhook = WebhookClient.createClient(this.bot, Main.FEUD_WEBHOOK);
+        this.buildCompWebhook = WebhookClient.createClient(this.bot, Main.BUILD_COMP_WEBHOOK);
 
         // Checks every minute for the time because I'm lazy
         DisablePingTask.getInstance().start();
