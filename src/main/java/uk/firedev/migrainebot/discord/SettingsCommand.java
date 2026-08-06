@@ -2,6 +2,7 @@ package uk.firedev.migrainebot.discord;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.Command;
@@ -59,6 +60,12 @@ public class SettingsCommand extends ListenerAdapter {
         switch (setting) {
             case "automod-rule-id" -> {
                 try {
+                    long id = Long.parseLong(value);
+                    TextChannel channel = guild.getTextChannelById(id);
+                    if (channel == null) {
+                        event.getInteraction().reply("That channel doesn't exist in this server?").queue();
+                        return;
+                    }
                     Main.CONFIG.autoModRuleId = Long.parseLong(value);
                     Main.CONFIG.save();
                     event.getInteraction().reply("AutoMod Rule ID has been set to " + value).setEphemeral(true).queue();
@@ -68,7 +75,13 @@ public class SettingsCommand extends ListenerAdapter {
             }
             case "log-channel-id" -> {
                 try {
-                    Main.CONFIG.logChannelId = Long.parseLong(value);
+                    long id = Long.parseLong(value);
+                    TextChannel channel = guild.getTextChannelById(id);
+                    if (channel == null) {
+                        event.getInteraction().reply("That channel doesn't exist in this server?").queue();
+                        return;
+                    }
+                    Main.CONFIG.logChannelId = id;
                     Main.CONFIG.save();
                     event.getInteraction().reply("Log Channel ID has been set to " + value).setEphemeral(true).queue();
                 } catch (NumberFormatException exception) {
