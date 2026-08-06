@@ -1,7 +1,9 @@
 package uk.firedev.migrainebot.discord;
 
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.IncomingWebhookClient;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.WebhookClient;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -89,27 +91,23 @@ public class SettingsCommand extends ListenerAdapter {
                 }
             }
             case "indigena-webhook" -> {
-                String oldValue = Main.CONFIG.webhooks.indigena;
-                Main.CONFIG.webhooks.indigena = value;
                 try {
-                    MigraineBot.get().reloadWebhooks();
+                    MigraineBot.get().indigenaWebhook = WebhookClient.createClient(MigraineBot.get().getBot(), value);
+                    Main.CONFIG.webhooks.indigena = value;
                     Main.CONFIG.save();
                     event.getInteraction().reply("Successfully changed Indigena Webhook").setEphemeral(true).queue();
                 } catch (IllegalArgumentException exception) {
                     event.getInteraction().reply("Invalid Indigena Webhook").setEphemeral(true).queue();
-                    Main.CONFIG.webhooks.indigena = oldValue;
                 }
             }
             case "build-comp-webhook" -> {
-                String oldValue = Main.CONFIG.webhooks.buildComp;
-                Main.CONFIG.webhooks.buildComp = value;
                 try {
-                    MigraineBot.get().reloadWebhooks();
+                    MigraineBot.get().buildCompWebhook = WebhookClient.createClient(MigraineBot.get().getBot(), value);
+                    Main.CONFIG.webhooks.buildComp = value;
                     Main.CONFIG.save();
                     event.getInteraction().reply("Successfully changed Build Comp Webhook").setEphemeral(true).queue();
                 } catch (IllegalArgumentException exception) {
                     event.getInteraction().reply("Invalid Build Comp Webhook").setEphemeral(true).queue();
-                    Main.CONFIG.webhooks.buildComp = oldValue;
                 }
             }
         }

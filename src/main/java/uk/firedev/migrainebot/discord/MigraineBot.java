@@ -50,7 +50,8 @@ public class MigraineBot {
             SettingsCommand.get()
         ).queue();
 
-        reloadWebhooks();
+        this.indigenaWebhook = WebhookClient.createClient(this.bot, Main.CONFIG.webhooks.indigena);
+        this.buildCompWebhook = WebhookClient.createClient(this.bot, Main.CONFIG.webhooks.buildComp);
 
         // Checks every minute for the time because I'm lazy
         DisablePingTask.getInstance().start();
@@ -70,11 +71,6 @@ public class MigraineBot {
         } catch (InterruptedException exception) {
             Main.getLogger().log(Level.SEVERE, "Waiting for bot to load was interrupted!", exception);
         }
-    }
-
-    public void reloadWebhooks() {
-        this.indigenaWebhook = WebhookClient.createClient(this.bot, Main.CONFIG.webhooks.indigena);
-        this.buildCompWebhook = WebhookClient.createClient(this.bot, Main.CONFIG.webhooks.buildComp);
     }
 
 }
