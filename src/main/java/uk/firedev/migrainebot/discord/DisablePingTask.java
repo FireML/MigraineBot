@@ -18,6 +18,8 @@ import java.util.concurrent.TimeUnit;
 
 public class DisablePingTask extends TimerTask {
 
+    public static DisablePingTask INSTANCE;
+
     private final Timer timer = new Timer();
     private final Set<Integer> allowedHours = Set.of(
         9,
@@ -35,14 +37,6 @@ public class DisablePingTask extends TimerTask {
     );
 
     private Boolean isMentionable = null;
-
-    private static final DisablePingTask INSTANCE = new DisablePingTask();
-
-    private DisablePingTask() {}
-
-    public static @NotNull DisablePingTask getInstance() {
-        return INSTANCE;
-    }
 
     public void start() {
         timer.scheduleAtFixedRate(this, 0L, TimeUnit.MINUTES.toMillis(1));

@@ -10,18 +10,22 @@ import java.util.logging.Logger;
 
 public class Main {
 
-    public static final Configuration CONFIG;
+    public static Configuration CONFIG;
 
     static {
-        Path configFile = Paths.get("config.yml");
-        CONFIG = ConfigurationLoader.from(configFile)
-            .withComments()
-            .load(Configuration::new);
+        loadConfig();
         // Save new keys.
         CONFIG.save();
     }
 
-    static void main(String[] args) {
+    public static void loadConfig() {
+        Path configFile = Paths.get("config.yml");
+        CONFIG = ConfigurationLoader.from(configFile)
+            .withComments()
+            .load(Configuration::new);
+    }
+
+    static void main() {
         MigraineBot.get().load();
         Main.getLogger().info("Loaded!");
     }

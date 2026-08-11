@@ -50,6 +50,7 @@ public class MigraineBot {
             SubmitCommand.get(),
             BuildCompCommand.get(),
             SettingsCommand.get(),
+            SettingsCommand.getReload(),
             AwardShowCommand.get()
         ).queue();
 
@@ -57,7 +58,22 @@ public class MigraineBot {
         this.buildCompWebhook = WebhookClient.createClient(this.bot, Main.CONFIG.webhooks.buildComp);
 
         // Checks every minute for the time because I'm lazy
-        DisablePingTask.getInstance().start();
+        DisablePingTask.INSTANCE = new DisablePingTask();
+        DisablePingTask.INSTANCE.start();
+    }
+
+    public void reload() {
+        Main.getLogger().info("Reloading MigraineBot.");
+        unload();
+        Main.loadConfig();
+        load();
+    }
+
+    public void unload() {
+        this.bot.shutdown();
+        this.indigenaWebhook = null;
+        this.buildCompWebhook = null;
+        DisablePingTask.INSTANCE.cancel();
     }
 
     public JDA getBot() {

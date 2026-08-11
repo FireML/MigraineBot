@@ -1,7 +1,6 @@
 package uk.firedev.migrainebot.discord;
 
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.IncomingWebhookClient;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.WebhookClient;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -23,6 +22,10 @@ public class SettingsCommand extends ListenerAdapter {
         return Commands.slash("settings", "Configure MigraineBot.").addOptions(getOptions());
     }
 
+    public static SlashCommandData getReload() {
+        return Commands.slash("reload", "Reloads MigraineBot.");
+    }
+
     private static List<OptionData> getOptions() {
         return List.of(
             new OptionData(OptionType.STRING, "setting", "The setting to change.").addChoices(getSettingChoices()).setRequired(true),
@@ -41,7 +44,7 @@ public class SettingsCommand extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(@NotNull SlashCommandInteractionEvent event) {
-        if (!event.getName().equals("settings")) {
+        if (!event.getName().equals("settings") && !event.getName().equals("reload")) {
             return;
         }
         Guild guild = event.getGuild();
@@ -50,12 +53,24 @@ public class SettingsCommand extends ListenerAdapter {
             event.getInteraction().reply("You cannot use this command here.").setEphemeral(true).queue();
             return;
         }
-        boolean canUse = member.getRoles().stream().anyMatch(role -> role.getIdLong() == Main.CONFIG.settingsRoleId);
+        // Allows configured role and me (FireML) to access commands.
+        boolean canUse = member.getIdLong() == 767886112177389599L || member.getRoles().stream().anyMatch(role -> role.getIdLong() == Main.CONFIG.settingsRoleId);
         if (!canUse) {
             event.getInteraction().reply("You are not permitted to use this command.").setEphemeral(true).queue();
             return;
         }
+        switch (event.getName()) {
+            case "settings" -> settings(event, guild);
+            case "reload" -> reload(event);
+        }
+    }
 
+    private void reload(@NotNull SlashCommandInteractionEvent event) {
+        event.getInteraction().reply("Beep Boop. Reloading.").queue();
+        MigraineBot.get().reload();
+    }
+
+    private void settings(@NotNull SlashCommandInteractionEvent event, @NotNull Guild guild) {
         String setting = event.getOption("setting").getAsString();
         String value = event.getOption("value").getAsString();
 
