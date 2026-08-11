@@ -32,7 +32,7 @@ public class MsgCommandListener extends ListenerAdapter {
         String name = event.getOption("name").getAsString();
         String message = event.getOption("message").getAsString();
         Configuration.get().addMsgCommand(name, message);
-        event.getInteraction().reply("Your message command has been added. Reload the bot to update commands.").queue();
+        event.getInteraction().reply("Your message command has been added. Reload the bot to update commands.").setEphemeral(true).queue();
     }
 
     private void removeCommand(SlashCommandInteractionEvent event) {
@@ -42,7 +42,7 @@ public class MsgCommandListener extends ListenerAdapter {
         }
         String name = event.getOption("name").getAsString();
         Configuration.get().removeMsgCommand(name);
-        event.getInteraction().reply("Your message command has been removed. Reload the bot to update commands.").queue();
+        event.getInteraction().reply("Your message command has been removed. Reload the bot to update commands.").setEphemeral(true).queue();
     }
 
 }

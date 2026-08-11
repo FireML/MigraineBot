@@ -66,7 +66,7 @@ public class SettingsCommand extends ListenerAdapter {
     }
 
     private void reload(@NotNull SlashCommandInteractionEvent event) {
-        event.getInteraction().reply("Beep Boop. Reloading.").queue();
+        event.getInteraction().reply("Beep Boop. Reloading.").setEphemeral(true).queue();
         MigraineBot.get().reload();
     }
 
@@ -80,7 +80,7 @@ public class SettingsCommand extends ListenerAdapter {
                     long id = Long.parseLong(value);
                     TextChannel channel = guild.getTextChannelById(id);
                     if (channel == null) {
-                        event.getInteraction().reply("That channel doesn't exist in this server?").queue();
+                        event.getInteraction().reply("That channel doesn't exist in this server?").setEphemeral(true).queue();
                         return;
                     }
                     Configuration.get().setAutoModRuleId(id);
@@ -94,7 +94,7 @@ public class SettingsCommand extends ListenerAdapter {
                     long id = Long.parseLong(value);
                     TextChannel channel = guild.getTextChannelById(id);
                     if (channel == null) {
-                        event.getInteraction().reply("That channel doesn't exist in this server?").queue();
+                        event.getInteraction().reply("That channel doesn't exist in this server?").setEphemeral(true).queue();
                         return;
                     }
                     Configuration.get().setLogChannelId(id);
