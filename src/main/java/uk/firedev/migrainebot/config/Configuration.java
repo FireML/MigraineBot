@@ -1,46 +1,90 @@
 package uk.firedev.migrainebot.config;
 
-import de.bsommerfeld.jshepherd.annotation.Comment;
-import de.bsommerfeld.jshepherd.annotation.Key;
-import de.bsommerfeld.jshepherd.annotation.Section;
-import de.bsommerfeld.jshepherd.core.ConfigurablePojo;
+import dev.dejvokep.boostedyaml.YamlDocument;
+import org.jetbrains.annotations.NotNull;
 
-public class Configuration extends ConfigurablePojo<Configuration> {
+import java.io.File;
+import java.io.IOException;
 
-    @Key("bot-token")
-    @Comment("The discord bot token.")
-    public String botToken;
+public class Configuration {
 
-    @Key("server-id")
-    @Comment("The ID of the server to operate in.")
-    public long serverId;
+    private static final Configuration INSTANCE = new Configuration();
+    private static final File FILE = new File("config.yml");
 
-    @Key("automod-rule-id")
-    @Comment("The ID of the automod rule to toggle. (WoozStaff ping toggle)")
-    public long autoModRuleId;
+    private YamlDocument document;
 
-    @Key("log-channel-id")
-    @Comment("The ID of the channel to log to.")
-    public long logChannelId;
+    private Configuration() {}
 
-    @Key("settings-role-id")
-    @Comment("The role that can use the settings command.")
-    public long settingsRoleId;
+    public void reload() {
+        try {
+            document = YamlDocument.create(FILE);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-    @Comment("Webhook settings")
-    @Section("webhooks")
-    public WebhookSettings webhooks = new WebhookSettings();
+    public void save() {
+        try {
+            document.save();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-    public static class WebhookSettings {
+    public static @NotNull Configuration get() {
+        return INSTANCE;
+    }
 
-        @Key("indigena")
-        @Comment("Indigena Webhook")
-        public String indigena;
+    public @NotNull YamlDocument getConfig() {
+        return this.document;
+    }
 
-        @Key("build-comp")
-        @Comment("Build Comp Webhook")
-        public String buildComp;
+    public String getBotToken() {
+        return document.getString("bot-token");
+    }
 
+    public long getServerId() {
+        return document.getLong("server-id");
+    }
+
+    public long getAutoModRuleId() {
+        return document.getLong("automod-rule-id");
+    }
+
+    public void setAutoModRuleId(long id) {
+        document.set("automod-rule-id", id);
+        save();
+    }
+
+    public long getLogChannelId() {
+        return document.getLong("log-channel-id");
+    }
+
+    public void setLogChannelId(long id) {
+        document.set("log-channel-id", id);
+        save();
+    }
+
+    public long getSettingsRoleId() {
+        return document.getLong("settings-role-id");
+    }
+
+    public String getIndigenaWebhook() {
+        return document.getString("webhooks.indigena");
+    }
+
+    public void setIndigenaWebhook(String string) {
+        document.set("webhooks.indigena", string);
+        save();
+    }
+
+    public String getBuildCompWebhook() {
+        return document.getString("webhooks.build-comp");
+    }
+
+    public void setBuildCompWebhook(String string) {
+        document.set("webhooks.build-comp", string);
+        save();
     }
 
 }

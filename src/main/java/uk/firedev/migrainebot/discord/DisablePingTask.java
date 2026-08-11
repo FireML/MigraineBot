@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import org.jetbrains.annotations.NotNull;
 import uk.firedev.migrainebot.Main;
+import uk.firedev.migrainebot.config.Configuration;
 
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -75,11 +76,11 @@ public class DisablePingTask extends TimerTask {
     }
 
     private AutoModRule getRule() {
-        Guild guild = MigraineBot.get().getBot().getGuildById(Main.CONFIG.serverId);
+        Guild guild = MigraineBot.get().getBot().getGuildById(Configuration.get().getServerId());
         if (guild == null) {
             throw new RuntimeException("Invalid Guild.");
         }
-        AutoModRule rule = guild.retrieveAutoModRuleById(Main.CONFIG.autoModRuleId).complete();
+        AutoModRule rule = guild.retrieveAutoModRuleById(Configuration.get().getAutoModRuleId()).complete();
         if (rule == null) {
             throw new RuntimeException("Invalid AutoMod Rule.");
         }
@@ -87,7 +88,7 @@ public class DisablePingTask extends TimerTask {
     }
 
     private TextChannel getLogChannel() {
-        GuildChannel channel = MigraineBot.get().getBot().getGuildChannelById(Main.CONFIG.logChannelId);
+        GuildChannel channel = MigraineBot.get().getBot().getGuildChannelById(Configuration.get().getLogChannelId());
         if (!(channel instanceof TextChannel text)) {
             throw new RuntimeException("Log channel isn't a text channel");
         }

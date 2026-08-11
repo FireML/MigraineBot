@@ -16,6 +16,7 @@ import net.dv8tion.jda.api.modals.Modal;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 import org.jetbrains.annotations.NotNull;
 import uk.firedev.migrainebot.Main;
+import uk.firedev.migrainebot.config.Configuration;
 import uk.firedev.migrainebot.discord.MigraineBot;
 
 import java.awt.*;
@@ -31,7 +32,7 @@ public class BuildCompListener extends ListenerAdapter {
             return;
         }
         Guild guild = event.getGuild();
-        if (guild == null || guild.getIdLong() != Main.CONFIG.serverId) {
+        if (guild == null || guild.getIdLong() != Configuration.get().getServerId()) {
             event.getInteraction().reply("You cannot use this command here.").setEphemeral(true).queue();
             return;
         }

@@ -15,7 +15,7 @@ dependencies {
     implementation(libs.jda) {
         exclude(module="opus-java")
     }
-    implementation(libs.bundles.jshepherd)
+    implementation(libs.boostedyaml)
 }
 
 tasks {

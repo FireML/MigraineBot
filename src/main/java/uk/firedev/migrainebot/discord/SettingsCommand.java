@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.jetbrains.annotations.NotNull;
 import uk.firedev.migrainebot.Main;
+import uk.firedev.migrainebot.config.Configuration;
 
 import java.util.List;
 
@@ -49,12 +50,12 @@ public class SettingsCommand extends ListenerAdapter {
         }
         Guild guild = event.getGuild();
         Member member = event.getMember();
-        if (guild == null || member == null || guild.getIdLong() != Main.CONFIG.serverId) {
+        if (guild == null || member == null || guild.getIdLong() != Configuration.get().getServerId()) {
             event.getInteraction().reply("You cannot use this command here.").setEphemeral(true).queue();
             return;
         }
         // Allows configured role and me (FireML) to access commands.
-        boolean canUse = member.getIdLong() == 767886112177389599L || member.getRoles().stream().anyMatch(role -> role.getIdLong() == Main.CONFIG.settingsRoleId);
+        boolean canUse = member.getIdLong() == 767886112177389599L || member.getRoles().stream().anyMatch(role -> role.getIdLong() == Configuration.get().getSettingsRoleId());
         if (!canUse) {
             event.getInteraction().reply("You are not permitted to use this command.").setEphemeral(true).queue();
             return;
@@ -83,8 +84,7 @@ public class SettingsCommand extends ListenerAdapter {
                         event.getInteraction().reply("That channel doesn't exist in this server?").queue();
                         return;
                     }
-                    Main.CONFIG.autoModRuleId = Long.parseLong(value);
-                    Main.CONFIG.save();
+                    Configuration.get().setAutoModRuleId(id);
                     event.getInteraction().reply("AutoMod Rule ID has been set to " + value).setEphemeral(true).queue();
                 } catch (NumberFormatException exception) {
                     event.getInteraction().reply(value + " is not a valid ID").setEphemeral(true).queue();
@@ -98,8 +98,7 @@ public class SettingsCommand extends ListenerAdapter {
                         event.getInteraction().reply("That channel doesn't exist in this server?").queue();
                         return;
                     }
-                    Main.CONFIG.logChannelId = id;
-                    Main.CONFIG.save();
+                    Configuration.get().setLogChannelId(id);
                     event.getInteraction().reply("Log Channel ID has been set to " + value).setEphemeral(true).queue();
                 } catch (NumberFormatException exception) {
                     event.getInteraction().reply(value + " is not a valid ID").setEphemeral(true).queue();
@@ -108,8 +107,7 @@ public class SettingsCommand extends ListenerAdapter {
             case "indigena-webhook" -> {
                 try {
                     MigraineBot.get().indigenaWebhook = WebhookClient.createClient(MigraineBot.get().getBot(), value);
-                    Main.CONFIG.webhooks.indigena = value;
-                    Main.CONFIG.save();
+                    Configuration.get().setIndigenaWebhook(value);
                     event.getInteraction().reply("Successfully changed Indigena Webhook").setEphemeral(true).queue();
                 } catch (IllegalArgumentException exception) {
                     event.getInteraction().reply("Invalid Indigena Webhook").setEphemeral(true).queue();
@@ -118,8 +116,8 @@ public class SettingsCommand extends ListenerAdapter {
             case "build-comp-webhook" -> {
                 try {
                     MigraineBot.get().buildCompWebhook = WebhookClient.createClient(MigraineBot.get().getBot(), value);
-                    Main.CONFIG.webhooks.buildComp = value;
-                    Main.CONFIG.save();
+                    Configuration.get().setBuildCompWebhook(value);
+                    Configuration.get().save();
                     event.getInteraction().reply("Successfully changed Build Comp Webhook").setEphemeral(true).queue();
                 } catch (IllegalArgumentException exception) {
                     event.getInteraction().reply("Invalid Build Comp Webhook").setEphemeral(true).queue();

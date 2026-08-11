@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.WebhookClient;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import uk.firedev.migrainebot.Main;
+import uk.firedev.migrainebot.config.Configuration;
 import uk.firedev.migrainebot.discord.awardshow.AwardShowCommand;
 import uk.firedev.migrainebot.discord.buildcomp.BuildCompListener;
 import uk.firedev.migrainebot.discord.buildcomp.BuildCompCommand;
@@ -32,7 +33,7 @@ public class MigraineBot {
 
     protected JDABuilder initializeBuilder() {
         return JDABuilder.createLight(
-            Main.CONFIG.botToken,
+            Configuration.get().getBotToken(),
             EnumSet.allOf(GatewayIntent.class)
         ).setMemberCachePolicy(MemberCachePolicy.ALL);
     }
@@ -54,8 +55,8 @@ public class MigraineBot {
             AwardShowCommand.get()
         ).queue();
 
-        this.indigenaWebhook = WebhookClient.createClient(this.bot, Main.CONFIG.webhooks.indigena);
-        this.buildCompWebhook = WebhookClient.createClient(this.bot, Main.CONFIG.webhooks.buildComp);
+        this.indigenaWebhook = WebhookClient.createClient(this.bot, Configuration.get().getIndigenaWebhook());
+        this.buildCompWebhook = WebhookClient.createClient(this.bot, Configuration.get().getBuildCompWebhook());
 
         // Checks every minute for the time because I'm lazy
         DisablePingTask.INSTANCE = new DisablePingTask();
@@ -65,7 +66,7 @@ public class MigraineBot {
     public void reload() {
         Main.getLogger().info("Reloading MigraineBot.");
         unload();
-        Main.loadConfig();
+        Configuration.get().reload();
         load();
     }
 
