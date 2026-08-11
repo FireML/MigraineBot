@@ -12,6 +12,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.jetbrains.annotations.NotNull;
+import uk.firedev.migrainebot.Checks;
 import uk.firedev.migrainebot.Main;
 import uk.firedev.migrainebot.config.Configuration;
 
@@ -54,9 +55,7 @@ public class SettingsCommand extends ListenerAdapter {
             event.getInteraction().reply("You cannot use this command here.").setEphemeral(true).queue();
             return;
         }
-        // Allows configured role and me (FireML) to access commands.
-        boolean canUse = member.getIdLong() == 767886112177389599L || member.getRoles().stream().anyMatch(role -> role.getIdLong() == Configuration.get().getSettingsRoleId());
-        if (!canUse) {
+        if (!Checks.canUseAdminCommands(member)) {
             event.getInteraction().reply("You are not permitted to use this command.").setEphemeral(true).queue();
             return;
         }

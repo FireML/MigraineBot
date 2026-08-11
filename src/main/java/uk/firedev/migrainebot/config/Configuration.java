@@ -87,4 +87,14 @@ public class Configuration {
         save();
     }
 
+    public void addMsgCommand(@NotNull String name, @NotNull String message) {
+        document.set("message-commands." + name, message);
+        save();
+    }
+
+    public void removeMsgCommand(@NotNull String name) {
+        document.remove("message-commands." + name);
+        save();
+    }
+
 }

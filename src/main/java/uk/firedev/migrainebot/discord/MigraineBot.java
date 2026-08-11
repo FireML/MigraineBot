@@ -13,6 +13,9 @@ import uk.firedev.migrainebot.discord.buildcomp.BuildCompListener;
 import uk.firedev.migrainebot.discord.buildcomp.BuildCompCommand;
 import uk.firedev.migrainebot.discord.indigena.IndigenaListener;
 import uk.firedev.migrainebot.discord.indigena.SubmitCommand;
+import uk.firedev.migrainebot.discord.msgcommands.MsgCommandListener;
+import uk.firedev.migrainebot.discord.msgcommands.MsgCommandManager;
+import uk.firedev.migrainebot.discord.msgcommands.MsgCommands;
 
 import java.util.EnumSet;
 import java.util.logging.Level;
@@ -45,14 +48,19 @@ public class MigraineBot {
             new IndigenaListener(),
             new BuildCompListener(),
             new SettingsCommand(),
-            new AwardShowCommand()
+            new AwardShowCommand(),
+            new MsgCommandListener()
         );
         this.bot.updateCommands().addCommands(
             SubmitCommand.get(),
             BuildCompCommand.get(),
             SettingsCommand.get(),
             SettingsCommand.getReload(),
-            AwardShowCommand.get()
+            AwardShowCommand.get(),
+            MsgCommands.getAdd(),
+            MsgCommands.getRemove()
+        ).addCommands(
+            MsgCommands.getMessageCommands()
         ).queue();
 
         this.indigenaWebhook = WebhookClient.createClient(this.bot, Configuration.get().getIndigenaWebhook());
@@ -67,6 +75,7 @@ public class MigraineBot {
         Main.getLogger().info("Reloading MigraineBot.");
         unload();
         Configuration.get().reload();
+        MsgCommandManager.get().reload();
         load();
     }
 
