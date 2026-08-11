@@ -8,7 +8,6 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import uk.firedev.migrainebot.Main;
 import uk.firedev.migrainebot.config.Configuration;
-import uk.firedev.migrainebot.discord.awardshow.AwardShowCommand;
 import uk.firedev.migrainebot.discord.buildcomp.BuildCompListener;
 import uk.firedev.migrainebot.discord.buildcomp.BuildCompCommand;
 import uk.firedev.migrainebot.discord.indigena.IndigenaListener;
@@ -48,7 +47,6 @@ public class MigraineBot {
             new IndigenaListener(),
             new BuildCompListener(),
             new SettingsCommand(),
-            new AwardShowCommand(),
             new MsgCommandListener()
         );
         this.bot.updateCommands().addCommands(
@@ -56,7 +54,6 @@ public class MigraineBot {
             BuildCompCommand.get(),
             SettingsCommand.get(),
             SettingsCommand.getReload(),
-            AwardShowCommand.get(),
             MsgCommands.getAdd(),
             MsgCommands.getRemove()
         ).addCommands(
