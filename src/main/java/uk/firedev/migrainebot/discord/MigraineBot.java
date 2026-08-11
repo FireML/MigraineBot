@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.WebhookClient;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import uk.firedev.migrainebot.Main;
+import uk.firedev.migrainebot.discord.awardshow.AwardShowCommand;
 import uk.firedev.migrainebot.discord.buildcomp.BuildCompListener;
 import uk.firedev.migrainebot.discord.buildcomp.BuildCompCommand;
 import uk.firedev.migrainebot.discord.indigena.IndigenaListener;
@@ -42,12 +43,14 @@ public class MigraineBot {
         this.bot.addEventListener(
             new IndigenaListener(),
             new BuildCompListener(),
-            new SettingsCommand()
+            new SettingsCommand(),
+            new AwardShowCommand()
         );
         this.bot.updateCommands().addCommands(
             SubmitCommand.get(),
             BuildCompCommand.get(),
-            SettingsCommand.get()
+            SettingsCommand.get(),
+            AwardShowCommand.get()
         ).queue();
 
         this.indigenaWebhook = WebhookClient.createClient(this.bot, Main.CONFIG.webhooks.indigena);
