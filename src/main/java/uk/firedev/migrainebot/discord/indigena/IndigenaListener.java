@@ -2,6 +2,7 @@ package uk.firedev.migrainebot.discord.indigena;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.IncomingWebhookClient;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
@@ -36,6 +37,12 @@ public class IndigenaListener extends ListenerAdapter {
     }
 
     public void sendEmbed(@NotNull String ign, @NotNull String description, @NotNull Message.Attachment attachment, @NotNull SlashCommandInteraction interaction) {
+        IncomingWebhookClient webhook = MigraineBot.get().indigenaWebhook;
+        if (webhook == null) {
+            interaction.reply("Indigena is not currently active.").setEphemeral(true).queue();
+            return;
+        }
+
         MessageEmbed embed = new EmbedBuilder()
             .setColor(SUGGEST_COLOR)
             .setTitle("Submission")
@@ -44,7 +51,7 @@ public class IndigenaListener extends ListenerAdapter {
             .setImage(attachment.getUrl())
             .build();
 
-        MigraineBot.get().indigenaWebhook.sendMessageEmbeds(embed)
+        webhook.sendMessageEmbeds(embed)
             .and(interaction.reply("Your submission has been noted.").setEphemeral(true))
             .queue();
     }

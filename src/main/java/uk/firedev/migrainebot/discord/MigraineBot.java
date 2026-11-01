@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.IncomingWebhookClient;
 import net.dv8tion.jda.api.entities.WebhookClient;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import org.jetbrains.annotations.Nullable;
 import uk.firedev.migrainebot.Main;
 import uk.firedev.migrainebot.config.Configuration;
 import uk.firedev.migrainebot.discord.buildcomp.BuildCompListener;
@@ -24,8 +25,8 @@ public class MigraineBot {
     private static final MigraineBot instance = new MigraineBot();
     private JDA bot;
 
-    public IncomingWebhookClient indigenaWebhook;
-    public IncomingWebhookClient buildCompWebhook;
+    public @Nullable IncomingWebhookClient indigenaWebhook;
+    public @Nullable IncomingWebhookClient buildCompWebhook;
 
     public static MigraineBot get() {
         return instance;

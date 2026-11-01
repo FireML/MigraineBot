@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.Command;
+import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -17,6 +18,7 @@ import uk.firedev.migrainebot.Main;
 import uk.firedev.migrainebot.config.Configuration;
 
 import java.util.List;
+import java.util.Optional;
 
 public class SettingsCommand extends ListenerAdapter {
 
@@ -31,7 +33,7 @@ public class SettingsCommand extends ListenerAdapter {
     private static List<OptionData> getOptions() {
         return List.of(
             new OptionData(OptionType.STRING, "setting", "The setting to change.").addChoices(getSettingChoices()).setRequired(true),
-            new OptionData(OptionType.STRING, "value", "The new value of the setting.").setRequired(true)
+            new OptionData(OptionType.STRING, "value", "The new value of the setting.").setRequired(false)
         );
     }
 
@@ -39,8 +41,10 @@ public class SettingsCommand extends ListenerAdapter {
         return List.of(
             new Command.Choice("AutoMod Rule ID", "automod-rule-id"),
             new Command.Choice("Log Channel ID", "log-channel-id"),
-            new Command.Choice("Indigena Webhook", "indigena-webhook"),
-            new Command.Choice("Build Comp Webhook", "build-comp-webhook")
+            new Command.Choice("Set Indigena Webhook", "set-indigena-webhook"),
+            new Command.Choice("Remove Indigena Webhook", "remove-indigena-webhook"),
+            new Command.Choice("Set Build Comp Webhook", "set-build-comp-webhook"),
+            new Command.Choice("Remove Build Comp Webhook", "remove-build-comp-webhook")
         );
     }
 
@@ -72,11 +76,15 @@ public class SettingsCommand extends ListenerAdapter {
 
     private void settings(@NotNull SlashCommandInteractionEvent event, @NotNull Guild guild) {
         String setting = event.getOption("setting").getAsString();
-        String value = event.getOption("value").getAsString();
+        String value = Optional.ofNullable(event.getOption("value")).map(OptionMapping::getAsString).orElse(null);
 
         switch (setting) {
             case "automod-rule-id" -> {
                 try {
+                    if (value == null) {
+                        event.getInteraction().reply("Please provide an id.").queue();
+                        return;
+                    }
                     long id = Long.parseLong(value);
                     TextChannel channel = guild.getTextChannelById(id);
                     if (channel == null) {
@@ -91,6 +99,10 @@ public class SettingsCommand extends ListenerAdapter {
             }
             case "log-channel-id" -> {
                 try {
+                    if (value == null) {
+                        event.getInteraction().reply("Please provide an id.").queue();
+                        return;
+                    }
                     long id = Long.parseLong(value);
                     TextChannel channel = guild.getTextChannelById(id);
                     if (channel == null) {
@@ -103,8 +115,12 @@ public class SettingsCommand extends ListenerAdapter {
                     event.getInteraction().reply(value + " is not a valid ID").setEphemeral(true).queue();
                 }
             }
-            case "indigena-webhook" -> {
+            case "set-indigena-webhook" -> {
                 try {
+                    if (value == null) {
+                        event.getInteraction().reply("Please provide a webhook url.").queue();
+                        return;
+                    }
                     MigraineBot.get().indigenaWebhook = WebhookClient.createClient(MigraineBot.get().getBot(), value);
                     Configuration.get().setIndigenaWebhook(value);
                     event.getInteraction().reply("Successfully changed Indigena Webhook").setEphemeral(true).queue();
@@ -112,8 +128,17 @@ public class SettingsCommand extends ListenerAdapter {
                     event.getInteraction().reply("Invalid Indigena Webhook").setEphemeral(true).queue();
                 }
             }
-            case "build-comp-webhook" -> {
+            case "remove-indigena-webhook" -> {
+                MigraineBot.get().indigenaWebhook = null;
+                Configuration.get().setIndigenaWebhook(null);
+                event.getInteraction().reply("Successfully removed indigena webhook.").queue();
+            }
+            case "set-build-comp-webhook" -> {
                 try {
+                    if (value == null) {
+                        event.getInteraction().reply("Please provide a webhook url.").queue();
+                        return;
+                    }
                     MigraineBot.get().buildCompWebhook = WebhookClient.createClient(MigraineBot.get().getBot(), value);
                     Configuration.get().setBuildCompWebhook(value);
                     Configuration.get().save();
@@ -121,6 +146,11 @@ public class SettingsCommand extends ListenerAdapter {
                 } catch (IllegalArgumentException exception) {
                     event.getInteraction().reply("Invalid Build Comp Webhook").setEphemeral(true).queue();
                 }
+            }
+            case "remove-build-comp-webhook" -> {
+                MigraineBot.get().buildCompWebhook = null;
+                Configuration.get().setBuildCompWebhook(null);
+                event.getInteraction().reply("Successfully removed build comp webhook.").queue();
             }
         }
     }

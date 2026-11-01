@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.components.label.Label;
 import net.dv8tion.jda.api.components.textinput.TextInput;
 import net.dv8tion.jda.api.components.textinput.TextInputStyle;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.IncomingWebhookClient;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
@@ -47,6 +48,12 @@ public class BuildCompListener extends ListenerAdapter {
     }
 
     public void sendEmbed(@NotNull String ign, @NotNull String description, @NotNull Message.Attachment attachment, @NotNull SlashCommandInteraction interaction) {
+        IncomingWebhookClient webhook = MigraineBot.get().buildCompWebhook;
+        if (webhook == null) {
+            interaction.reply("A build competition is not currently active.").setEphemeral(true).queue();
+            return;
+        }
+
         MessageEmbed embed = new EmbedBuilder()
             .setColor(EMBED_COLOR)
             .setTitle("Submission")
@@ -55,7 +62,7 @@ public class BuildCompListener extends ListenerAdapter {
             .setImage(attachment.getUrl())
             .build();
 
-        MigraineBot.get().buildCompWebhook.sendMessageEmbeds(embed).queue();
+        webhook.sendMessageEmbeds(embed).queue();
         interaction.reply("Your submission has been noted.").setEphemeral(true).queue();
     }
 
