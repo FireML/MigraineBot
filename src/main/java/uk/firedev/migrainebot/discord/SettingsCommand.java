@@ -131,7 +131,7 @@ public class SettingsCommand extends ListenerAdapter {
             case "remove-indigena-webhook" -> {
                 MigraineBot.get().indigenaWebhook = null;
                 Configuration.get().setIndigenaWebhook(null);
-                event.getInteraction().reply("Successfully removed indigena webhook.").queue();
+                event.getInteraction().reply("Successfully removed indigena webhook.").setEphemeral(true).queue();
             }
             case "set-build-comp-webhook" -> {
                 try {
@@ -150,7 +150,7 @@ public class SettingsCommand extends ListenerAdapter {
             case "remove-build-comp-webhook" -> {
                 MigraineBot.get().buildCompWebhook = null;
                 Configuration.get().setBuildCompWebhook(null);
-                event.getInteraction().reply("Successfully removed build comp webhook.").queue();
+                event.getInteraction().reply("Successfully removed build comp webhook.").setEphemeral(true).queue();
             }
         }
     }
