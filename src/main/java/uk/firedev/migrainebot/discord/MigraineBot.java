@@ -61,8 +61,14 @@ public class MigraineBot {
             MsgCommands.getMessageCommands()
         ).queue();
 
-        this.indigenaWebhook = WebhookClient.createClient(this.bot, Configuration.get().getIndigenaWebhook());
-        this.buildCompWebhook = WebhookClient.createClient(this.bot, Configuration.get().getBuildCompWebhook());
+        String indigenaUrl = Configuration.get().getIndigenaWebhook();
+        if (indigenaUrl != null) {
+            this.indigenaWebhook = WebhookClient.createClient(this.bot, indigenaUrl);
+        }
+        String buildCompUrl = Configuration.get().getBuildCompWebhook();
+        if (buildCompUrl != null) {
+            this.buildCompWebhook = WebhookClient.createClient(this.bot, buildCompUrl);
+        }
 
         // Checks every minute for the time because I'm lazy
         DisablePingTask.INSTANCE = new DisablePingTask();
