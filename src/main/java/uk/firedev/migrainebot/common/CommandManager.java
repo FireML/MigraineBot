@@ -7,7 +7,12 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.jetbrains.annotations.NotNull;
 import uk.firedev.migrainebot.command.ReloadCommand;
 import uk.firedev.migrainebot.command.SettingsCommand;
+import uk.firedev.migrainebot.command.message.AddMessageCommand;
 import uk.firedev.migrainebot.command.message.MessageCommand;
+import uk.firedev.migrainebot.command.message.RemoveMessageCommand;
+import uk.firedev.migrainebot.command.submission.AddSubmissionCommand;
+import uk.firedev.migrainebot.command.submission.RemoveSubmissionCommand;
+import uk.firedev.migrainebot.command.submission.SubmissionCommand;
 import uk.firedev.migrainebot.common.Command;
 import uk.firedev.migrainebot.config.Configuration;
 
@@ -35,6 +40,7 @@ public class CommandManager extends ListenerAdapter {
 
         // Configurable
         loadMessageCommands();
+        loadSubmissionCommands();
     }
 
     public List<? extends Command> getLoaded() {
@@ -45,9 +51,12 @@ public class CommandManager extends ListenerAdapter {
         return loaded.stream().map(Command::create).toList();
     }
 
-    // Message Commands
+    // Loading
 
     private void loadMessageCommands() {
+        loaded.add(new AddMessageCommand());
+        loaded.add(new RemoveMessageCommand());
+
         Section section = Configuration.get().getConfig().getSection("message-commands");
         if (section == null) {
             return;
@@ -56,6 +65,23 @@ public class CommandManager extends ListenerAdapter {
             String val = section.getString(key);
             if (val != null) {
                 MessageCommand command = new MessageCommand(key, val);
+                loaded.add(command);
+            }
+        });
+    }
+
+    private void loadSubmissionCommands() {
+        loaded.add(new AddSubmissionCommand());
+        loaded.add(new RemoveSubmissionCommand());
+
+        Section section = Configuration.get().getConfig().getSection("submission-commands");
+        if (section == null) {
+            return;
+        }
+        section.getRoutesAsStrings(false).forEach(key -> {
+            Long val = section.getLong(key);
+            if (val != null) {
+                SubmissionCommand command = new SubmissionCommand(key, val);
                 loaded.add(command);
             }
         });

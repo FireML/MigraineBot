@@ -4,15 +4,12 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
-import org.jetbrains.annotations.NotNull;
 import uk.firedev.migrainebot.Checks;
 import uk.firedev.migrainebot.common.Command;
 import uk.firedev.migrainebot.config.Configuration;
 import uk.firedev.migrainebot.discord.MigraineBot;
 
-import java.util.Optional;
-
-public class AddCommand extends Command {
+public class AddMessageCommand extends Command {
 
     @Override
     public String name() {

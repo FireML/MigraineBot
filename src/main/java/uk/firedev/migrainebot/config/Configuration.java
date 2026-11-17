@@ -69,24 +69,6 @@ public class Configuration {
         return document.getLong("settings-role-id");
     }
 
-    public String getIndigenaWebhook() {
-        return document.getString("webhooks.indigena");
-    }
-
-    public void setIndigenaWebhook(String string) {
-        document.set("webhooks.indigena", string);
-        save();
-    }
-
-    public String getBuildCompWebhook() {
-        return document.getString("webhooks.build-comp");
-    }
-
-    public void setBuildCompWebhook(String string) {
-        document.set("webhooks.build-comp", string);
-        save();
-    }
-
     public void addMsgCommand(@NotNull String name, @NotNull String message) {
         document.set("message-commands." + name, message);
         save();
@@ -94,6 +76,16 @@ public class Configuration {
 
     public void removeMsgCommand(@NotNull String name) {
         document.remove("message-commands." + name);
+        save();
+    }
+
+    public void addSubmissionCommand(@NotNull String name, long channel) {
+        document.set("submission-commands." + name, channel);
+        save();
+    }
+
+    public void removeSubmissionCommand(@NotNull String name) {
+        document.remove("submission-commands." + name);
         save();
     }
 

@@ -14,7 +14,7 @@ import uk.firedev.migrainebot.discord.msgcommands.CommandManager;
 import java.util.List;
 import java.util.Objects;
 
-public class RemoveCommand extends Command {
+public class RemoveMessageCommand extends Command {
 
     @Override
     public String name() {
