@@ -1,5 +1,7 @@
 package uk.firedev.migrainebot.command.submission;
 
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -25,13 +27,23 @@ public class AddSubmissionCommand extends Command {
 
     @Override
     public void execute(SlashCommandInteractionEvent event) {
+        Guild guild = event.getGuild();
+        if (guild == null || guild.getIdLong() != Configuration.get().getServerId()) {
+            event.getInteraction().reply("You cannot use this command here.").setEphemeral(true).queue();
+            return;
+        }
         if (!Checks.canUseAdminCommands(event.getMember())) {
             event.getInteraction().reply("You are not permitted to use this command.").setEphemeral(true).queue();
             return;
         }
         String name = event.getOption("name").getAsString();
-        long channel = event.getOption("channel").getAsLong();
-        Configuration.get().addSubmissionCommand(name, channel);
+        long channelId = event.getOption("channel").getAsLong();
+        GuildMessageChannel channel = guild.getChannelById(GuildMessageChannel.class, channelId);
+        if (channel == null) {
+            event.getInteraction().reply("Channel must be a message channel.").setEphemeral(true).queue();
+            return;
+        }
+        Configuration.get().addSubmissionCommand(name, channelId);
         event.getInteraction().reply("Your submission command has been added. Reloading the bot.").setEphemeral(true).queue();
         MigraineBot.get().reload();
     }

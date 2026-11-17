@@ -4,7 +4,9 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.concrete.ThreadChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -63,13 +65,13 @@ public class SubmissionCommand extends Command {
             .map(OptionMapping::getAsString)
             .orElse("Not Provided.");
 
-        submit(channel, event, name, description, attachment);
+        submit(event, name, description, attachment);
     }
 
-    public void submit(long threadId, @NotNull SlashCommandInteraction interaction, @NotNull String ign, @NotNull String description, @NotNull Message.Attachment attachment) {
-        ThreadChannel thread = MigraineBot.get().getBot().getThreadChannelById(threadId);
-        if (thread == null) {
-            interaction.reply("Could not process your submission. Please ping <@767886112177389599> or try again later.").queue();
+    public void submit(@NotNull SlashCommandInteraction interaction, @NotNull String ign, @NotNull String description, @NotNull Message.Attachment attachment) {
+        GuildMessageChannel channel = MigraineBot.get().getBot().getChannelById(GuildMessageChannel.class, this.channel);
+        if (channel == null) {
+            interaction.reply("Could not process your submission. Please notify staff or try again later.").queue();
             return;
         }
         MessageEmbed embed = new EmbedBuilder()
@@ -79,7 +81,7 @@ public class SubmissionCommand extends Command {
             .addField("Description:", description, false)
             .setImage(attachment.getUrl())
             .build();
-        thread.sendMessageEmbeds(embed).queue();
+        channel.sendMessageEmbeds(embed).queue();
         interaction.reply("Your submission has been noted.").setEphemeral(true).queue();
     }
 
