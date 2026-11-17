@@ -1,0 +1,6 @@
+[libraries]
+jda = "net.dv8tion:JDA:6.4.1"
+boostedyaml = "dev.dejvokep:boosted-yaml:1.3.7"
+
+[plugins]
+shadow = "com.gradleup.shadow:9.6.1"

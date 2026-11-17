@@ -32,5 +32,10 @@ tasks {
         archiveBaseName.set("migrainebot")
         archiveVersion.set("")
         archiveClassifier.set("")
+
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+
+        relocate("net.dv8tion.jda", "uk.firedev.migrainebot.libs.jda")
+        relocate("dev.dejvokep.boostedyaml", "uk.firedev.migrainebot.libs.boostedyaml")
     }
 }
