@@ -8,14 +8,9 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.jetbrains.annotations.Nullable;
 import uk.firedev.migrainebot.Main;
+import uk.firedev.migrainebot.command.SettingsCommand;
 import uk.firedev.migrainebot.config.Configuration;
-import uk.firedev.migrainebot.discord.buildcomp.BuildCompListener;
-import uk.firedev.migrainebot.discord.buildcomp.BuildCompCommand;
-import uk.firedev.migrainebot.discord.indigena.IndigenaListener;
-import uk.firedev.migrainebot.discord.indigena.SubmitCommand;
-import uk.firedev.migrainebot.discord.msgcommands.MsgCommandListener;
-import uk.firedev.migrainebot.discord.msgcommands.MsgCommandManager;
-import uk.firedev.migrainebot.discord.msgcommands.MsgCommands;
+import uk.firedev.migrainebot.discord.msgcommands.CommandManager;
 
 import java.util.EnumSet;
 import java.util.logging.Level;
@@ -24,9 +19,6 @@ public class MigraineBot {
 
     private static final MigraineBot instance = new MigraineBot();
     private JDA bot;
-
-    public @Nullable IncomingWebhookClient indigenaWebhook;
-    public @Nullable IncomingWebhookClient buildCompWebhook;
 
     public static MigraineBot get() {
         return instance;
@@ -42,33 +34,15 @@ public class MigraineBot {
     }
 
     public void load() {
+        CommandManager commands = CommandManager.get();
+        commands.reload();
+
         this.bot = buildBot(initializeBuilder());
         awaitBotReady();
-        this.bot.addEventListener(
-            new IndigenaListener(),
-            new BuildCompListener(),
-            new SettingsCommand(),
-            new MsgCommandListener()
-        );
-        this.bot.updateCommands().addCommands(
-            SubmitCommand.get(),
-            BuildCompCommand.get(),
-            SettingsCommand.get(),
-            SettingsCommand.getReload(),
-            MsgCommands.getAdd(),
-            MsgCommands.getRemove()
-        ).addCommands(
-            MsgCommands.getMessageCommands()
-        ).queue();
-
-        String indigenaUrl = Configuration.get().getIndigenaWebhook();
-        if (indigenaUrl != null) {
-            this.indigenaWebhook = WebhookClient.createClient(this.bot, indigenaUrl);
-        }
-        String buildCompUrl = Configuration.get().getBuildCompWebhook();
-        if (buildCompUrl != null) {
-            this.buildCompWebhook = WebhookClient.createClient(this.bot, buildCompUrl);
-        }
+        this.bot.addEventListener(commands);
+        this.bot.updateCommands()
+            .addCommands(commands.buildCommands())
+            .queue();
 
         // Checks every minute for the time because I'm lazy
         DisablePingTask.INSTANCE = new DisablePingTask();
@@ -79,14 +53,11 @@ public class MigraineBot {
         Main.getLogger().info("Reloading MigraineBot.");
         unload();
         Configuration.get().reload();
-        MsgCommandManager.get().reload();
         load();
     }
 
     public void unload() {
         this.bot.shutdown();
-        this.indigenaWebhook = null;
-        this.buildCompWebhook = null;
         DisablePingTask.INSTANCE.cancel();
     }
 
