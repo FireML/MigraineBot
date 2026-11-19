@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.interactions.commands.SlashCommandInteraction;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import net.dv8tion.jda.api.requests.restaction.interactions.ReplyCallbackAction;
 import org.jetbrains.annotations.NotNull;
 import uk.firedev.migrainebot.Storage;
 import uk.firedev.migrainebot.common.Command;
@@ -23,6 +24,7 @@ import uk.firedev.migrainebot.discord.MigraineBot;
 import java.awt.*;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 public class SubmissionCommand extends Command {
 
@@ -79,15 +81,21 @@ public class SubmissionCommand extends Command {
             interaction.reply("Could not process your submission. Please notify staff or try again later.").queue();
             return;
         }
-        interaction.reply("Your submission has been noted.").setEphemeral(true).queue(); // Done first because saving may take too long :)
-        MessageEmbed embed = new EmbedBuilder()
-            .setColor(EMBED_COLOR)
-            .setTitle("Submission (/" + name + ")")
-            .addField("In-game Username:", ign, false)
-            .addField("Description:", description, false)
-            .setImage(Storage.saveAttachment(attachment))
-            .build();
-        channel.sendMessageEmbeds(embed).queue();
+        interaction.deferReply(true).queue(callback -> {
+            String attachmentUrl = Storage.saveAttachment(attachment, callback);
+            if (attachmentUrl == null) {
+                return;
+            }
+            MessageEmbed embed = new EmbedBuilder()
+                .setColor(EMBED_COLOR)
+                .setTitle("Submission (/" + name + ")")
+                .addField("In-game Username:", ign, false)
+                .addField("Description:", description, false)
+                .setImage(attachmentUrl)
+                .build();
+            channel.sendMessageEmbeds(embed).queue();
+            callback.sendMessage("Your submission has been noted.").setEphemeral(true).queue();
+        });
     }
 
 }
