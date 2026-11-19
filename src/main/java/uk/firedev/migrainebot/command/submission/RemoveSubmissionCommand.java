@@ -42,7 +42,7 @@ public class RemoveSubmissionCommand extends Command {
             return;
         }
         String name = event.getOption("name").getAsString();
-        Configuration.get().removeMsgCommand(name);
+        Configuration.get().removeSubmissionCommand(name);
         event.getInteraction().reply("Your submission command has been removed. Reloading the bot.").setEphemeral(true).queue();
         MigraineBot.get().reload();
     }
