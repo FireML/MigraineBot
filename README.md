@@ -13,7 +13,7 @@ This bot was written in Java using the [JDA](https://github.com/discord-jda/JDA)
 | Command                    | Description                                                                   |
 |----------------------------|-------------------------------------------------------------------------------|
 | `/settings`                | Configure the bot.                                                            |
-| `/addmessagecommand`       | Add a command, which sends the user the given message when used.              |
+| `/addmessagecommand`       | Adds a command, which sends the user the given message when used.              |
 | `/removemessagecommand`    | Removes a message command.                                                    |
-| `/addsubmissioncommand`    | Add a command, which accepts submissions and sends them to the given channel. |
+| `/addsubmissioncommand`    | Adds a command, which accepts submissions and sends them to the given channel. |
 | `/removesubmissioncommand` | Removes a submission command.                                                 |
