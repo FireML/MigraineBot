@@ -4,7 +4,6 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.automod.AutoModRule;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
-import org.jetbrains.annotations.NotNull;
 import uk.firedev.migrainebot.Main;
 import uk.firedev.migrainebot.config.Configuration;
 

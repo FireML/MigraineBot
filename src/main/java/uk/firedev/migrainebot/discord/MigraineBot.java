@@ -2,13 +2,9 @@ package uk.firedev.migrainebot.discord;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.IncomingWebhookClient;
-import net.dv8tion.jda.api.entities.WebhookClient;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.MemberCachePolicy;
-import org.jetbrains.annotations.Nullable;
 import uk.firedev.migrainebot.Main;
-import uk.firedev.migrainebot.command.SettingsCommand;
 import uk.firedev.migrainebot.config.Configuration;
 import uk.firedev.migrainebot.discord.msgcommands.CommandManager;
 

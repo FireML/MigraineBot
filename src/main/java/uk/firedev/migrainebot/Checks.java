@@ -1,7 +1,6 @@
 package uk.firedev.migrainebot;
 
 import net.dv8tion.jda.api.entities.Member;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import uk.firedev.migrainebot.config.Configuration;
 

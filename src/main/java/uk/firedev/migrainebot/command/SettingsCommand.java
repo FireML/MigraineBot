@@ -2,21 +2,17 @@ package uk.firedev.migrainebot.command;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.WebhookClient;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.Command;
-import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import uk.firedev.migrainebot.Checks;
 import uk.firedev.migrainebot.config.Configuration;
-import uk.firedev.migrainebot.discord.MigraineBot;
 
 import java.util.List;
-import java.util.Optional;
 
 public class SettingsCommand extends uk.firedev.migrainebot.common.Command {
 
