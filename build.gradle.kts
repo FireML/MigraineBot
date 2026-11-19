@@ -16,6 +16,7 @@ dependencies {
         exclude(module="opus-java")
     }
     implementation(libs.boostedyaml)
+    implementation(libs.s3)
 }
 
 tasks {

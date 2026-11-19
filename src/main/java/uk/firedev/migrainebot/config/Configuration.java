@@ -43,6 +43,14 @@ public class Configuration {
         return document.getString("bot-token");
     }
 
+    public String getS3AccessKey() {
+        return document.getString("s3.access-key");
+    }
+
+    public String getS3SecretKey() {
+        return document.getString("s3.secret-key");
+    }
+
     public long getServerId() {
         return document.getLong("server-id");
     }

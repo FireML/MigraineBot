@@ -15,6 +15,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.jetbrains.annotations.NotNull;
+import uk.firedev.migrainebot.Storage;
 import uk.firedev.migrainebot.common.Command;
 import uk.firedev.migrainebot.config.Configuration;
 import uk.firedev.migrainebot.discord.MigraineBot;
@@ -61,6 +62,10 @@ public class SubmissionCommand extends Command {
         }
         String name = event.getOption("username").getAsString();
         Message.Attachment attachment = event.getOption("submission").getAsAttachment();
+        if (!attachment.isImage()) {
+            event.getInteraction().reply("Attachment must be an image.").setEphemeral(true).queue();
+            return;
+        }
         String description = Optional.ofNullable(event.getOption("description"))
             .map(OptionMapping::getAsString)
             .orElse("Not Provided.");
@@ -74,15 +79,15 @@ public class SubmissionCommand extends Command {
             interaction.reply("Could not process your submission. Please notify staff or try again later.").queue();
             return;
         }
+        interaction.reply("Your submission has been noted.").setEphemeral(true).queue(); // Done first because saving may take too long :)
         MessageEmbed embed = new EmbedBuilder()
             .setColor(EMBED_COLOR)
             .setTitle("Submission (/" + name + ")")
             .addField("In-game Username:", ign, false)
             .addField("Description:", description, false)
-            .setImage(attachment.getUrl())
+            .setImage(Storage.saveAttachment(attachment))
             .build();
         channel.sendMessageEmbeds(embed).queue();
-        interaction.reply("Your submission has been noted.").setEphemeral(true).queue();
     }
 
 }
